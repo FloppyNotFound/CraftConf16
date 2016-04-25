@@ -28,7 +28,7 @@ namespace CraftConf16.WinPhone
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            LoadApplication(new CraftConf16.App());
+            LoadApplication(new CraftConf16.Shared.App());
         }
 
         /// <summary>

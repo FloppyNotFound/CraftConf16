@@ -21,7 +21,7 @@ namespace CraftConf16.Windows
         {
             this.InitializeComponent();
 
-            LoadApplication(new CraftConf16.App());
+            LoadApplication(new CraftConf16.Shared.App());
         }
     }
 }

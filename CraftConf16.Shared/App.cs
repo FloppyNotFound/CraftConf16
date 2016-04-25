@@ -5,7 +5,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace CraftConf16
+namespace CraftConf16.Shared
 {
 	public class App : Application
 	{

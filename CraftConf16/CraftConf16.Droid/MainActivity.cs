@@ -17,7 +17,7 @@ namespace CraftConf16.Droid
 			base.OnCreate (bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
-			LoadApplication (new CraftConf16.App ());
+			LoadApplication (new CraftConf16.Shared.App ());
 		}
 	}
 }

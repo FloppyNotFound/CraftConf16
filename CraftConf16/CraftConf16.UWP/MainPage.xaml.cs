@@ -21,7 +21,7 @@ namespace CraftConf16.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new CraftConf16.App());
+            LoadApplication(new CraftConf16.Shared.App());
         }
     }
 }
