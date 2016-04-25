@@ -24,12 +24,12 @@ namespace CraftConf16.Shared
 
             // Get Header
             var stages = rows
-                            .First()
-                            .ChildNodes
-                            .Where(c => c.GetAttributeValue("class", "")
-                            .Equals("stage"))
-                            .Select(s => s.InnerText)
-                            .ToList();
+                        .First()
+                        .ChildNodes
+                        .Where(c => c.GetAttributeValue("class", "")
+                        .Equals("stage"))
+                        .Select(s => s.InnerText)
+                        .ToList();
 
             var resultList = new Dictionary<string, List<Talk>>();
 
@@ -46,57 +46,52 @@ namespace CraftConf16.Shared
                 var isFullTimeSlot = tableData.Any(x => x.Descendants().Any(d => d.GetAttributeValue("class", "").Contains("full-slot")));
                                 
                 var amountTalksThisRow = row.ChildNodes.Count(c => c.GetAttributeValue("class", "").Equals("schedule-slot"));
-                var td = row.FirstChild;
 
-                // Talks
-                for (var i = 0; i < amountTalksThisRow; i++)
+                // Talks //
+                for(var i = 0; i< amountTalksThisRow; i++)
                 {
-                    if(i != 0)
-                        td = row.NextSibling;
-
                     // Get time and title of talk
                     string time = null;
-                    //List<string> titles = null;
+                    string speaker = null;
                     string title = null;
+
+                    IEnumerable<HtmlNode> timeRootNode = tableData;
 
                     if (isFullTimeSlot)
                     {
-                        time = tableData
-                                .Single()
-                                .ChildNodes
-                                .Single(c => c.GetAttributeValue("class", "")
-                                        .Contains("schedule-time"))
-                                .InnerText;
-
                         title = tableData
-                                .Single()
-                                .ChildNodes
-                                .Single(c => c.GetAttributeValue("class", "")
-                                        .Equals("talk-title"))
-                                .InnerText;
+                                    .First()
+                                    .ChildNodes
+                                    .Single(c => c.GetAttributeValue("class", "")
+                                            .Equals("talk-title"))
+                                    .InnerText;
 
-                        //titles.Add(title);
-                    }
-                    else
-                    {
-                        continue;
-                        time = tableData
-                            .Single(s => s.GetAttributeValue("class", "")
-                            .Equals("schedule-time"))
-                            .InnerText;
-
-                        
-                        // Here are more than one talks!
-                    }
-
-                    var speakerNode = td
+                        var speakerNode = tableData
+                                .First()
                                 .Descendants()
                                 .SingleOrDefault(d => d.GetAttributeValue("class", "")
                                 .Equals("schedule-speaker"));
 
-                    var speaker = speakerNode != null ? speakerNode.InnerText : "None";
+                        speaker = speakerNode != null ? speakerNode.InnerText : "None";
+
+                        // For full time slots, there is another root for Time
+                        timeRootNode = tableData.First().ChildNodes;
+                    }
+                    else
+                    {
+                        continue;
+                        title = tableData
+                                .SingleOrDefault(d => d.GetAttributeValue("class", "")
+                                .Equals("schedule-speaker")).InnerText;
+                    }
+
+                    time = timeRootNode
+                            .Single(c => c.GetAttributeValue("class", "")
+                                    .Contains("schedule-time"))
+                            .InnerText;
 
                     // Create new Talk entry
+                    //titles.ForEach(t => t.)
                     var talk = new Talk()
                     {
                         StartTime = time.Substring(0, 5),
@@ -112,7 +107,7 @@ namespace CraftConf16.Shared
                         resultList[key].Add(talk);
                     else
                         resultList.Add(key, new List<Talk>() { talk });
-                }
+                }                
             }
 
             return resultList;

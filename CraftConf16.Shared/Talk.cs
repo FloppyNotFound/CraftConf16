@@ -13,7 +13,5 @@ namespace CraftConf16.Shared
         public string Title { get; set; }
 
         public string Speaker { get; set; }
-
-        public string Location { get; set; }
     }
 }
