@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CraftConf16.Shared
 {
     public interface ICalenderParser
     {
-        void GetSchedule(ConfEvent confEvent);
+        Task<Dictionary<string,List<Talk>>> GetSchedule(ConfEvent confEvent);
     }
 }

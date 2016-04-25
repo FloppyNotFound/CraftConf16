@@ -17,15 +17,23 @@ namespace CraftConf16.Shared
 					VerticalOptions = LayoutOptions.Center,
 					Children = {
 						new Label {
-							XAlign = TextAlignment.Center,
+							HorizontalTextAlignment = TextAlignment.Center,
 							Text = "Welcome to Xamarin Forms!"
 						}
 					}
 				}
 			};
+
+            LoadCalender();
 		}
 
-		protected override void OnStart ()
+        private async void LoadCalender()
+        {
+            var parser = new CalenderParser();
+            var taskList = await parser.GetSchedule(ConfEvent.SessionDay1);
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

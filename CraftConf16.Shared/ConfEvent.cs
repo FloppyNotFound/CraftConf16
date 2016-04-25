@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CraftConf16.Shared
+﻿namespace CraftConf16.Shared
 {
     public enum ConfEvent
     {
-        SessionDay1,
-        SessionDay2
+        SessionDay1 = 0,
+        SessionDay2 = 1
     }
 }
