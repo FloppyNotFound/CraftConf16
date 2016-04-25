@@ -47,42 +47,51 @@ namespace CraftConf16.Shared
                                 
                 var amountTalksThisRow = row.ChildNodes.Count(c => c.GetAttributeValue("class", "").Equals("schedule-slot"));
 
+                var i = 0;
+
                 // Talks //
-                for(var i = 0; i< amountTalksThisRow; i++)
+                foreach(var td in tableData)
                 {
                     // Get time and title of talk
                     string time = null;
                     string speaker = null;
                     string title = null;
 
-                    IEnumerable<HtmlNode> timeRootNode = tableData;
+                    IEnumerable<HtmlNode> timeRootNode = td.ChildNodes;
 
                     if (isFullTimeSlot)
                     {
-                        title = tableData
-                                    .First()
-                                    .ChildNodes
-                                    .Single(c => c.GetAttributeValue("class", "")
-                                            .Equals("talk-title"))
-                                    .InnerText;
+                        title = td
+                                .ChildNodes
+                                .Single(c => c.GetAttributeValue("class", "")
+                                        .Equals("talk-title"))
+                                .InnerText;
 
-                        var speakerNode = tableData
-                                .First()
+                        var speakerNode = td
                                 .Descendants()
                                 .SingleOrDefault(d => d.GetAttributeValue("class", "")
                                 .Equals("schedule-speaker"));
 
                         speaker = speakerNode != null ? speakerNode.InnerText : "None";
-
-                        // For full time slots, there is another root for Time
-                        timeRootNode = tableData.First().ChildNodes;
                     }
                     else
                     {
-                        continue;
-                        title = tableData
-                                .SingleOrDefault(d => d.GetAttributeValue("class", "")
-                                .Equals("schedule-speaker")).InnerText;
+                        // For non-full time slots, there is another root for Time
+                        timeRootNode = tableData;
+
+                        // Ignore first td for it's the date node
+                        if (td.GetAttributeValue("class", "").Equals("schedule-time"))
+                            continue;
+
+                        speaker = td.ChildNodes
+                                .Single(d => d.GetAttributeValue("class", "")
+                                .Equals("schedule-speaker"))
+                                .InnerText;
+
+                        title = td.ChildNodes
+                                .Single(d => d.GetAttributeValue("class", "")
+                                .Equals("talk-title"))
+                                .InnerText;
                     }
 
                     time = timeRootNode
@@ -91,7 +100,6 @@ namespace CraftConf16.Shared
                             .InnerText;
 
                     // Create new Talk entry
-                    //titles.ForEach(t => t.)
                     var talk = new Talk()
                     {
                         StartTime = time.Substring(0, 5),
@@ -107,7 +115,9 @@ namespace CraftConf16.Shared
                         resultList[key].Add(talk);
                     else
                         resultList.Add(key, new List<Talk>() { talk });
-                }                
+
+                    i++;
+                }
             }
 
             return resultList;
