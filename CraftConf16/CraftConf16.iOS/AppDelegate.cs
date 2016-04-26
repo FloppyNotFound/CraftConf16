@@ -23,7 +23,7 @@ namespace CraftConf16.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new CraftConf16.App ());
+			LoadApplication (new CraftConf16.Shared.App ());
 
 			return base.FinishedLaunching (app, options);
 		}

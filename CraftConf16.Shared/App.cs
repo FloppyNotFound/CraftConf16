@@ -1,42 +1,61 @@
-﻿using System;
+﻿using CraftConf16.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace CraftConf16.Shared
 {
-	public class App : Application
+    public class App : Application
 	{
-		public App ()
+        private Dictionary<string, List<Talk>> _allTalksDay1 { get; set; }
+        private Dictionary<string, List<Talk>> _allTalksDay2 { get; set; }
+
+        private int _amountTabs = 7;
+
+        public TalkViewModel TalkViewModel { get; set; }
+
+        public App ()
 		{
-			// The root page of your application
-			MainPage = new ContentPage {
-				Content = new StackLayout {
-					VerticalOptions = LayoutOptions.Center,
-					Children = {
-						new Label {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Welcome to Xamarin Forms!"
-						}
-					}
-				}
-			};
+            var carouselPage = new CarouselPage();
+            TalkViewModel = new TalkViewModel();
 
-            LoadCalender();
-		}
+            for (int i = 1; i <_amountTabs; i++)
+            {
+                var stagePage = new Page1();
+                stagePage.Title = "temp " + i;
+                stagePage.BindingContext = TalkViewModel;
+                carouselPage.Children.Add(stagePage);
+            }
 
-        private async void LoadCalender()
+            MainPage = carouselPage;
+
+            SetMainPage();
+        }
+
+        private async void SetMainPage()
+        {
+            await LoadCalender();          
+
+            for (int i = 1; i < _allTalksDay1.Keys.Count() -1; i++)
+            {
+                var currentPage = (MainPage as CarouselPage).Children.ElementAt(i);
+                currentPage.Title = _allTalksDay1.Keys.ElementAt(i);
+                TalkViewModel.Talks = _allTalksDay1.Values.ElementAt(i);
+            }
+        }
+
+        private async Task LoadCalender()
         {
             var parser = new CalenderParser();
-            var taskList = await parser.GetSchedule(ConfEvent.SessionDay1);
+            _allTalksDay1 = await parser.GetSchedule(ConfEvent.SessionDay1);
+            _allTalksDay2 = await parser.GetSchedule(ConfEvent.SessionDay2);
         }
 
         protected override void OnStart ()
 		{
-			// Handle when your app starts
-		}
+            // Handle when your app starts
+        }
 
 		protected override void OnSleep ()
 		{
