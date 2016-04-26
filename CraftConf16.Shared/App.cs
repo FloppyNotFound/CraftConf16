@@ -13,18 +13,22 @@ namespace CraftConf16.Shared
 
         private int _amountTabs = 7;
 
-        public TalkViewModel TalkViewModel { get; set; }
+        public List<TalkViewModel> TalkViewModels { get; set; }
 
         public App ()
 		{
             var carouselPage = new CarouselPage();
-            TalkViewModel = new TalkViewModel();
+            TalkViewModels = new List<TalkViewModel>();
 
+            // Create ViewModels for all Pages (=Stages)
             for (int i = 1; i <_amountTabs; i++)
-            {
+            {                
+                var talkViewModel = new TalkViewModel();
+                TalkViewModels.Add(talkViewModel);
+
                 var stagePage = new Page1();
-                stagePage.Title = "temp " + i;
-                stagePage.BindingContext = TalkViewModel;
+                stagePage.BindingContext = talkViewModel;
+
                 carouselPage.Children.Add(stagePage);
             }
 
@@ -37,11 +41,12 @@ namespace CraftConf16.Shared
         {
             await LoadCalender();          
 
-            for (int i = 1; i < _allTalksDay1.Keys.Count() -1; i++)
+            for (int i = 0; i < _allTalksDay1.Keys.Count() -1; i++)
             {
                 var currentPage = (MainPage as CarouselPage).Children.ElementAt(i);
                 currentPage.Title = _allTalksDay1.Keys.ElementAt(i);
-                TalkViewModel.Talks = _allTalksDay1.Values.ElementAt(i);
+                TalkViewModels.ElementAt(i).Talks = _allTalksDay1.Values.ElementAt(i);
+                TalkViewModels.ElementAt(i).Stage = _allTalksDay1.Keys.ElementAt(i);
             }
         }
 
