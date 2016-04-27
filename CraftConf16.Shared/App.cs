@@ -17,7 +17,7 @@ namespace CraftConf16.Shared
 
         public App ()
 		{
-            var carouselPage = new CarouselPage();
+            var carouselPage = new TabbedPage();
             TalkViewModels = new List<TalkViewModel>();
 
             // Create ViewModels for all Pages (=Stages)
@@ -43,7 +43,7 @@ namespace CraftConf16.Shared
 
             for (int i = 0; i < _allTalksDay1.Keys.Count() -1; i++)
             {
-                var currentPage = (MainPage as CarouselPage).Children.ElementAt(i);
+                var currentPage = (MainPage as TabbedPage).Children.ElementAt(i);
                 currentPage.Title = _allTalksDay1.Keys.ElementAt(i);
                 TalkViewModels.ElementAt(i).Talks = _allTalksDay1.Values.ElementAt(i);
                 TalkViewModels.ElementAt(i).Stage = _allTalksDay1.Keys.ElementAt(i);

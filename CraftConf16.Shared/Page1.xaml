@@ -2,17 +2,33 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CraftConf16.Shared.Page1" Title="test">
-  <StackLayout>
-    <Label Text="{Binding Stage}" VerticalOptions="Center" HorizontalOptions="Center"  />
+  <StackLayout VerticalOptions="FillAndExpand" Orientation="Vertical">
+    <Label Text="{Binding Stage}" VerticalOptions="Center" HorizontalOptions="Center" />
+    <Grid HeightRequest="80">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="3*" />
+        <ColumnDefinition Width="4*" />
+        <ColumnDefinition Width="5*" />
+      </Grid.ColumnDefinitions>
+      <Label Text="Time" Grid.Column="0" FontSize="Medium" HorizontalTextAlignment="Center" />
+      <Label Text="Speaker" Grid.Column="1" FontSize="Medium" HorizontalTextAlignment="Center" />
+      <Label Text="Title" Grid.Column="2" FontSize="Medium" HorizontalTextAlignment="Center" />
+    </Grid>
     <ListView ItemsSource="{Binding Talks}">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell>
             <ViewCell.View>
-              <StackLayout Orientation="Horizontal">
-                <Label Text="Name: " />
-                <Label Text="{Binding Speaker}" />
-              </StackLayout>              
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="90" />
+                  <ColumnDefinition Width="110" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding TimeSlot}" Grid.Column="0" HeightRequest="80" />
+                <Label Text="{Binding Speaker}" Grid.Column="1" HeightRequest="80" />
+                <Label Text="{Binding Title}" Grid.Column="2" HeightRequest="80"/>
+              </Grid>             
             </ViewCell.View>            
           </ViewCell>
         </DataTemplate>

@@ -65,14 +65,15 @@ namespace CraftConf16.Shared
                                 .ChildNodes
                                 .Single(c => c.GetAttributeValue("class", "")
                                         .Equals("talk-title"))
-                                .InnerText;
+                                .InnerText
+                                .Trim();
 
                         var speakerNode = td
                                 .Descendants()
                                 .SingleOrDefault(d => d.GetAttributeValue("class", "")
                                 .Equals("schedule-speaker"));
 
-                        speaker = speakerNode != null ? speakerNode.InnerText : "None";
+                        speaker = speakerNode != null ? speakerNode.InnerText.Trim() : "None";
                     }
                     else
                     {
@@ -86,18 +87,21 @@ namespace CraftConf16.Shared
                         speaker = td.ChildNodes
                                 .Single(d => d.GetAttributeValue("class", "")
                                 .Equals("schedule-speaker"))
-                                .InnerText;
+                                .InnerText
+                                .Trim();
 
                         title = td.ChildNodes
                                 .Single(d => d.GetAttributeValue("class", "")
                                 .Equals("talk-title"))
-                                .InnerText;
+                                .InnerText
+                                .Trim();
                     }
 
                     time = timeRootNode
                             .Single(c => c.GetAttributeValue("class", "")
                                     .Contains("schedule-time"))
-                            .InnerText;
+                            .InnerText
+                            .Trim();
 
                     // Create new Talk entry
                     var talk = new Talk()

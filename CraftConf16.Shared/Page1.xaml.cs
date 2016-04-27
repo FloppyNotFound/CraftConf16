@@ -15,10 +15,5 @@ namespace CraftConf16.Shared
         {
             InitializeComponent();
         }
-
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-        }
     }
 }
