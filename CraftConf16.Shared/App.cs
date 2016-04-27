@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System;
 
 namespace CraftConf16.Shared
 {
@@ -20,6 +21,9 @@ namespace CraftConf16.Shared
             var carouselPage = new TabbedPage();
             TalkViewModels = new List<TalkViewModel>();
 
+            carouselPage.ToolbarItems.Add(CreateToolbar(ConfEvent.SessionDay1));
+            carouselPage.ToolbarItems.Add(CreateToolbar(ConfEvent.SessionDay2));
+            
             // Create ViewModels for all Pages (=Stages)
             for (int i = 1; i <_amountTabs; i++)
             {                
@@ -34,19 +38,58 @@ namespace CraftConf16.Shared
 
             MainPage = carouselPage;
 
-            SetMainPage();
+            SetMainPage(ConfEvent.SessionDay1);
         }
 
-        private async void SetMainPage()
+        private ToolbarItem CreateToolbar(ConfEvent confEvent)
         {
-            await LoadCalender();          
+            var toolbarItem = new ToolbarItem();
 
-            for (int i = 0; i < _allTalksDay1.Keys.Count() -1; i++)
+            switch (confEvent)
+            {
+                case ConfEvent.SessionDay1:
+                    toolbarItem.Text = "Day 1";
+                    toolbarItem.Clicked += delegate { SetMainPage(ConfEvent.SessionDay1); };
+                    break;
+                case ConfEvent.SessionDay2:
+                    toolbarItem.Text = "Day 2";
+                    toolbarItem.Clicked += delegate { SetMainPage(ConfEvent.SessionDay2); };
+                    break;
+                default:
+                    throw new ArgumentException("Event not supported");
+            }
+
+            return toolbarItem;
+        }
+
+        private async void SetMainPage(ConfEvent sessionDay)
+        {
+            if(_allTalksDay1 == null || _allTalksDay2 == null)
+                await LoadCalender();
+
+            int numElements = 0;
+            Dictionary<string, List<Talk>> talkDict;
+
+            switch (sessionDay)
+            {
+                case ConfEvent.SessionDay1:
+                    numElements = _allTalksDay1.Keys.Count();
+                    talkDict = _allTalksDay1;
+                    break;
+                case ConfEvent.SessionDay2:
+                    numElements = _allTalksDay2.Keys.Count();
+                    talkDict = _allTalksDay2;
+                    break;
+                default:
+                    throw new ArgumentException("Event not supported");
+            }
+
+            for (int i = 0; i < numElements -1; i++)
             {
                 var currentPage = (MainPage as TabbedPage).Children.ElementAt(i);
-                currentPage.Title = _allTalksDay1.Keys.ElementAt(i);
-                TalkViewModels.ElementAt(i).Talks = _allTalksDay1.Values.ElementAt(i);
-                TalkViewModels.ElementAt(i).Stage = _allTalksDay1.Keys.ElementAt(i);
+                currentPage.Title = talkDict.Keys.ElementAt(i);
+                TalkViewModels.ElementAt(i).Talks = talkDict.Values.ElementAt(i);
+                TalkViewModels.ElementAt(i).Stage = talkDict.Keys.ElementAt(i);
             }
         }
 
